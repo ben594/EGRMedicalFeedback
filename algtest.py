@@ -31,8 +31,24 @@ c = 3 #scale factor
 
 #define pid 
 target_bp = 65
-pid = PID(1, 0.05, 0.01, setpoint = target_bp)
+pid = PID(8, 0.01, 0.001, setpoint = target_bp)
 pid.output_limits = (0, None)
+'''
+for i in range(250):
+    #update bp
+    control = pid(calculate_bp(bp[-1])) 
+    bp.append(control) #append calculated bp to end of array
+    bp.pop(0) #remove first element from array
+
+mean = sum(bp)/len(bp)
+variance = sum([((x - mean) ** 2) for x in bp]) / len(bp)
+res = variance ** 0.5
+
+print(mean)
+print(res)
+print(max(bp) - min(bp))
+
+'''
 
 while not done:
         clock.tick(FPS); #set framerate
@@ -64,3 +80,4 @@ while not done:
         bp.pop(0) #remove first element from array
 
         pygame.display.flip()
+#'''
