@@ -16,11 +16,13 @@ infusion_rate = 40
 time_count = 1
 initial_pressure = 115 #P0
 noise = 0
+target_bp = 70
+
+prev_infusion_rate = initial_pressure - target_bp
 
 #create bp array with starting bp of 60
 bp = [115]
 #define pid 
-target_bp = 100
 P = 0.7500
 I = 0.0140
 D = 0
@@ -36,9 +38,10 @@ pid.error_map = calc_error
 pid.output_limits = (0, 180)
 
 def calc_infusion_rate(time):
-    global infusion_rate, time_count
-    return pid(infusion_rate, dt=time_count)
-    #return 50
+    global infusion_rate, time_count, prev_infusion_rate
+    #infusion_rate =  pid(prev_infusion_rate, dt=time_count)
+    #return infusion_rate
+    return initial_pressure - target_bp
 
 def calculate_pressure(time):
     global previous_pressure_change
@@ -58,5 +61,5 @@ def calculate_bp(time):
 for t in range(1, 250):
     control = calculate_bp(time_count)
     print("MAP "+ str(control))
-    print("infusion rate "+ str(infusion_rate))
+    #print("infusion rate "+ str(infusion_rate))
     time_count += 1
