@@ -11,7 +11,9 @@
         {
             "padding": "10,10",
             "text_horiz_alignment": "center",
-            "text_vert_alignment": "center"
+            "text_vert_alignment": "center",
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10"
         },
         "font":
         {
@@ -26,7 +28,7 @@
     {
         "colours":
         {
-            "normal_text": "#000000"
+            "normal_text": "#FFFFFF"
         },
         "font":
         {
@@ -42,9 +44,67 @@
         "colours":
         {
             "normal_text": "#000000",
-            "normal_bg":"#FFFFFF",
-            "hovered_bg":"#b1b3b1",
+            "normal_bg":"#ffffff",
+            "hovered_bg":"#d0d0d0",
             "hovered_text":"#000000"
+        },
+        "misc":{
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10"
+        }
+    },
+    "#stop_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#e55451",
+            "hovered_bg":"#c24641",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#override_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#ffae42",
+            "hovered_bg":"#ffa500",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#update_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#add8e6",
+            "hovered_bg":"#a3cedc",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
         }
     }
 }
