@@ -15,11 +15,28 @@ import pygame_gui
 from pygame_gui.elements.ui_text_box import UITextBox
 from pygame_gui.elements.ui_label import UILabel
 from pygame_gui.elements.ui_drop_down_menu import UIDropDownMenu
-from pygame_widgets.dropdown import Dropdown
+from pygame_gui.windows.ui_message_window import UIMessageWindow
 
+# set up pid stuff
 pygame.init()
-
 clock = pygame.time.Clock()
+
+# pid tuning parameters
+P = 0.75
+I = 0.0140
+D = 0
+
+# map model parameters
+b0 = 0.18661
+bm = 0.07464
+a1 = 0.74082
+m = 3
+d = 3
+
+# stores 10 most recent infusion rates
+infusion_log = []
+for i in range(0, 10):
+    infusion_log.append(0)
 
 #reads current bp, outputs calculated bp for the next timestep
 def calculate_bp(cur_bp):
@@ -49,17 +66,17 @@ initial_avg = sum(bp)/len(bp)
 
 pygame.display.set_caption('Ultimate Feedback')
 window_surface = pygame.display.set_mode((800, 600)) # overall window
-bp_wave = pygame.Surface((500, 200)) # display block for bp wave
+bp_wave = pygame.Surface((480, 200)) # display block for bp wave
 dropdown_cover = pygame.Surface((200, 75)) # display block to hide/reset dropdown after selecting option
 
 background = pygame.Surface((800, 600))
-background.fill(pygame.Color('#FFFFFF'))
+background.fill(pygame.Color('#4d5052'))
 window_surface.blit(background, (0, 0))
 
 manager = pygame_gui.UIManager((800, 600), 'theme.json')
 
-pygame.draw.rect(window_surface, pygame.Color('#000000'), pygame.Rect(510, 10, 280, 190), 2)
-pygame.draw.rect(window_surface, pygame.Color('#000000'), pygame.Rect(510, 210, 280, 190), 2)
+pygame.draw.rect(window_surface, pygame.Color('white'), pygame.Rect(510, 10, 280, 190), 2)
+pygame.draw.rect(window_surface, pygame.Color('white'), pygame.Rect(510, 210, 280, 190), 2)
 # text box for target MAP label
 target_display_x = 600
 target_display_y = 90
@@ -137,39 +154,40 @@ target_bp_display = UITextBox(str(target_bp),
 # dropdown_display = pygame.Surface((200, 100))
 # dropdown_display.fill(pygame.Color('#000000'))
 
-enter_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 500), (200, 50)), text='UPDATE', manager=manager)
-stop_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((510, 500), (280, 50)), text='STOP', manager=manager)
-manual_override_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((510, 430), (280, 50)), text='OVERRIDE', manager=manager)
-up_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 250), (75, 40)), text='UP', manager=manager)
-down_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 310), (75, 40)), text='DOWN', manager=manager)
+enter_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 430), (200, 120)), text='UPDATE', manager=manager, object_id="#update_button")
+stop_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((510, 500), (280, 50)), text='STOP', manager=manager, object_id="#stop_button")
+manual_override_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((510, 430), (280, 50)), text='OVERRIDE', manager=manager, object_id="#override_button")
+up_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 250), (200, 40)), text='UP', manager=manager)
+down_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((280, 310), (200, 40)), text='DOWN', manager=manager)
 
 # med select menu
 select_med_x = 50
-select_med_y = 370
+select_med_y = 390
 select_medication_text = UILabel(pygame.Rect((select_med_x, select_med_y), (200, 45)), "Select Medication",
                                  manager=manager)
 menu_x = 50
-menu_y = 410
+menu_y = 430
 menu_width = 200
-menu_height = 80
-menu = pygame_gui.elements.UIDropDownMenu(options_list={"n/a", "A", "B"},
+menu_height = 50
+menu = UIDropDownMenu(options_list={"n/a", "A", "B"},
                                           starting_option=medication,
                                           relative_rect=pygame.Rect((menu_x, menu_y), (menu_width, menu_height)),
                                           manager=manager)
 
-# dropdown = Dropdown(
-#     dropdown_display, 0, 0, 100, 50, name='Select Color',
-#     choices=[
-#         'Red',
-#         'Blue',
-#         'Yellow',
-#     ],
-#     borderRadius=3, colour=pygame.Color('green'), values=[1, 2, 'true'], direction='down', textHAlign='left'
-# )
+# manual dose input
+# manual_input = UI
+
+pygame.draw.line(window_surface, pygame.Color('black'),
+                 [480, 10],
+                 [490, 10], 1)
 
 in_range = False
+manual_mode = False
 frame_counter = 0
 
+# popup = UIMessageWindow(pygame.Rect((0, 0), (800, 600)), "hello", manager=manager)
+
+# main loop
 while not done:
     time_delta = clock.tick(60)/1000.0
     manager.update(time_delta)
@@ -210,6 +228,7 @@ while not done:
                 print("in range: ", in_range)
             if event.ui_element == stop_button:
                 print("Stop button pressed")
+                popup = UIMessageWindow(pygame.Rect((0, 0), (800, 600)), "hello", manager=manager)
             if event.ui_element == up_button:
                 new_target_bp = new_target_bp + 1
                 target_bp_display = UITextBox(str(new_target_bp),
@@ -222,6 +241,9 @@ while not done:
                                               pygame.Rect((50, 250), (200, 100)),
                                               manager=manager)
                 print("Down button pressed")
+            if event.ui_element == manual_override_button:
+                manual_mode = True
+                
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             print("Selected option:", event.text)
             new_medication = event.text
@@ -236,7 +258,7 @@ while not done:
 
     manager.draw_ui(window_surface)
     # window_surface.blit(background, (0, 0))
-    bp_wave.fill(pygame.Color("#000000"))
+    bp_wave.fill(pygame.Color("#111111"))
 
     #avg bp in given frame
     avg = sum(bp)/len(bp)
