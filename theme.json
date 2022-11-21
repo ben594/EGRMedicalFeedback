@@ -73,12 +73,48 @@
             "regular_path": "Roboto/Roboto-Thin.ttf"
         }
     },
+    "#reset_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#96d294",
+            "hovered_bg":"#96d294",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
     "#override_button":
     {
         "colours":
         {
             "normal_text": "#000000",
             "normal_bg":"#ffae42",
+            "hovered_bg":"#ffa500",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#resume_auto_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#FAD02C",
             "hovered_bg":"#ffa500",
             "hovered_text":"#000000"
         },
@@ -137,10 +173,54 @@
         "font":
         {
             "name": "roboto",
-            "size": "25",
+            "size": "20",
             "bold": "1",
             "italic": "0",
             "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_resume_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#96d294",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_manual_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#ffae42",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "text_entry_line":
+    {
+        "colours":
+        {
+            "normal_text":"#000000",
+            "dark_bg":"#FFFFFF",
+            "normal_border":"#2b2b2b",
+            "text_cursor":"#000000"
         }
     }
 }
