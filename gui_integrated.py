@@ -74,8 +74,10 @@ def response(infusion):
     global infusion_log
     global map_change
     global previous_map_change
+    global medication
     
     if medication == "n/a":
+        print("infusion is 0, medication is: ", medication)
         infusion = 0
     
     # print("new infusion: ", infusion)
@@ -88,13 +90,13 @@ def response(infusion):
 
 # pygame window setup
 # -----------------------------------------------------
-pygame.display.set_caption('Ultimate Feedback')
+pygame.display.set_caption("Ultimate Feedback")
 window_surface = pygame.display.set_mode((800, 600)) # overall window
 bp_wave = pygame.Surface((470, 180)) # display block for bp wave
 dropdown_cover = pygame.Surface((200, 75)) # display block to hide/reset dropdown after selecting option
 
 background = pygame.Surface((800, 600))
-background.fill(pygame.Color('#000000'))
+background.fill(pygame.Color("#000000"))
 window_surface.blit(background, (0, 0))
 
 manager = pygame_gui.UIManager((800, 600), 'theme.json')
@@ -116,7 +118,7 @@ target_display_y = 90
 target_display_width = 150
 target_display_height = 60
 target_text = UILabel(pygame.Rect((target_display_x - 75, target_display_y), (75, 45)), "Target",
-                  manager=manager)
+                      manager=manager)
 
 # target MAP display
 # -----------------------------------------------------
@@ -180,7 +182,7 @@ med_text = UILabel(pygame.Rect((med_display_x - 75, med_display_y), (80, 45)), "
 # -----------------------------------------------------
 med_display = UITextBox(medication,
                         pygame.Rect((med_display_x, med_display_y), (med_display_width, med_display_height)),
-                        manager=manager)
+                        manager=manager, object_id="#med_display")
 
 # target bp selection
 # -----------------------------------------------------
@@ -188,7 +190,7 @@ target_select_x = 35
 target_select_y = 250
 target_select_width = 200
 target_select_height = 100
-med_text = UILabel(pygame.Rect((target_select_x, target_select_y - 40), (200, 45)), "Enter Target MAP",
+target_map_text = UILabel(pygame.Rect((target_select_x, target_select_y - 40), (200, 45)), "Enter Target MAP",
                    manager=manager)
 target_bp_display = UITextBox(str(target_bp),
                               pygame.Rect((target_select_x, target_select_y), (target_select_width, target_select_height)),
@@ -210,7 +212,7 @@ menu_x = 35
 menu_y = 450
 menu_width = 200
 menu_height = 50
-menu = UIDropDownMenu(options_list={"n/a", "A", "B"},
+menu = UIDropDownMenu(options_list={"n/a", "Sodium nitroprusside", "B"},
                       starting_option=medication,
                       relative_rect=pygame.Rect((menu_x, menu_y), (menu_width, menu_height)),
                       manager=manager)
@@ -218,6 +220,8 @@ menu = UIDropDownMenu(options_list={"n/a", "A", "B"},
 timestep = 1/10
 integral = 0
 derivative = 0
+
+system_stop = False
 
 # main loop
 while not done:
@@ -243,7 +247,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == pygame_gui.UI_BUTTON_PRESSED and not system_stop:
             if event.ui_element == enter_button:
                 print("Update button pressed")
                 target_bp = new_target_bp
@@ -256,10 +260,12 @@ while not done:
                 medication = new_medication
                 med_display = UITextBox(medication,
                                         pygame.Rect((med_display_x, med_display_y), (med_display_width, med_display_height)),
-                                        manager=manager)
+                                        manager=manager, object_id="#med_display")
                 print("in range: ", in_range)
+                print("medication: ", medication)
             if event.ui_element == stop_button:
                 print("Stop button pressed")
+                system_stop = True
                 # popup = UIMessageWindow(pygame.Rect((200, 200), (500, 300)), "Emergency stop button pressed. Infusion stopped.", manager=manager)
             if event.ui_element == up_button:
                 new_target_bp = new_target_bp + 1
@@ -293,6 +299,11 @@ while not done:
     control = P * error + I * integral + D * derivative
     if control < 0:
         control = 0
+    if system_stop:
+        print("stop pressed")
+        control = 0
+        medication = "n/a"
+        # popup 
     response(control)
 
     manager.draw_ui(window_surface)
@@ -328,5 +339,10 @@ while not done:
     infusion_display = UITextBox(str(round(infusion_log[len(infusion_log) - 1], 2)),
                         pygame.Rect((infusion_display_x, infusion_display_y), (infusion_display_width, infusion_display_height)),
                         manager=manager)
+    
+    if system_stop:
+        system_stop_popup = UITextBox("SYSTEM STOPPED",
+                                      pygame.Rect((510, 210), (280, 190)),
+                                      manager=manager, object_id="#system_stop_popup")
     
     pygame.display.flip()

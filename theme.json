@@ -108,5 +108,39 @@
             "italic": "0",
             "regular_path": "Roboto/Roboto-Thin.ttf"
         }
+    },
+    "#med_display":
+    {
+        "colours":
+        {
+            "normal_text":"#FFFFFF",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "13",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_stop_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#e55451",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "25",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
     }
 }
