@@ -105,7 +105,7 @@ manager = pygame_gui.UIManager((800, 750), 'theme.json')
 # rectangle containers for display
 # -----------------------------------------------------
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(510, 10, 280, 190), 0, 10)
-pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(510, 210, 280, 190), 0, 10)
+pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(510, 210, 280, 240), 0, 10)
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 210, 490, 160), 0, 10)
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 460, 250, 170), 0, 10)
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(270, 460, 230, 170), 0, 10)
