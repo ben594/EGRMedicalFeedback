@@ -376,7 +376,8 @@ while not done:
                 print("unlock button pressed")
                 if locked:
                     locked = False
-                    new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='LOCK', manager=manager, object_id="#unlock_button")
+                    # new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='LOCK', manager=manager, object_id="#unlock_button")
+                    lock_button.set_text("LOCK")
                 else:
                     locked = True
                     new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='UNLOCK', manager=manager, object_id="#unlock_button")
