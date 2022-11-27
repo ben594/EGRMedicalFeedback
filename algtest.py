@@ -8,6 +8,9 @@ pygame.init()
 FPS = 30
 clock = pygame.time.Clock()
 
+active_medication = 0
+taken_medication = 0
+
 #reads current bp, outputs calculated bp for the next timestep
 def calculate_bp(cur_bp, infusion_rate):
     #return (5*math.sin(t) + t+ 0.5 random.randrange(-1000, 1000, 1)/1000 + 50)
@@ -89,9 +92,9 @@ while not done:
 
         #iterates and draws line between bp points
         for i in range(int((len(bp)-1))):
-            #line(surface, color, start_pos, end_pos)
+            # line(surface, color, start_pos, end_pos)
             pygame.draw.line(screen, (0, 128, 255), (int(i*2*c),(500-c*bp[i])), (int((i+1)*2*c), (500-c*bp[i+1])))
-        
+    
         #update bp
         control = calculate_bp(bp[-1], pid(bp[-1]))
         #control = calculate_bp(bp[-1], 0)

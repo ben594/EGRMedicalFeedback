@@ -1,0 +1,278 @@
+{
+    "text_box":
+    {
+        "colours":
+        {
+            "normal_text":"#FFFFFF",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "misc":
+        {
+            "padding": "10,10",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center",
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "0"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "30",
+            "bold": "0",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Bold.ttf"
+        }
+    },
+    "label":
+    {
+        "colours":
+        {
+            "normal_text": "#FFFFFF"
+        },
+        "font":
+        {
+            "name": "roboto-regular",
+            "size": "20",
+            "bold": "0",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Regular.ttf"
+        }
+    },
+    "button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#ffffff",
+            "hovered_bg":"#d0d0d0",
+            "hovered_text":"#000000",
+            "normal_border":"#000000"
+        },
+        "misc":{
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10"
+        }
+    },
+    "#unlock_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#96d294",
+            "hovered_bg":"#96d294",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#stop_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#e55451",
+            "hovered_bg":"#c24641",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#reset_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#96d294",
+            "hovered_bg":"#96d294",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#override_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#ffae42",
+            "hovered_bg":"#ffa500",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#resume_auto_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#FAD02C",
+            "hovered_bg":"#ffa500",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#update_button":
+    {
+        "colours":
+        {
+            "normal_text": "#000000",
+            "normal_bg":"#add8e6",
+            "hovered_bg":"#a3cedc",
+            "hovered_text":"#000000"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "18",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#med_display":
+    {
+        "colours":
+        {
+            "normal_text":"#FFFFFF",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "13",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_stop_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#e55451",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_resume_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#FFFFFF",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_manual_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#ffae42",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "#system_no_med_popup":
+    {
+        "colours":
+        {
+            "normal_text":"#e55451",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "20",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    },
+    "text_entry_line":
+    {
+        "colours":
+        {
+            "normal_text":"#000000",
+            "dark_bg":"#FFFFFF",
+            "normal_border":"#2b2b2b",
+            "text_cursor":"#000000"
+        }
+    },
+    "#med_status":
+    {
+        "colours":
+        {
+            "normal_text":"#FFFFFF",
+            "dark_bg":"#2b2b2b",
+            "normal_border":"#2b2b2b"
+        },
+        "font":
+        {
+            "name": "roboto",
+            "size": "15",
+            "bold": "1",
+            "italic": "0",
+            "regular_path": "Roboto/Roboto-Thin.ttf"
+        }
+    }
+}
