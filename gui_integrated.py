@@ -221,7 +221,7 @@ lock_button_x = 20
 lock_button_y = 580
 lock_button_width = 240
 lock_button_height = 40
-lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='UNLOCK', manager=manager, object_id="#unlock_button")
+lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='UNLOCK INPUT', manager=manager, object_id="#unlock_button")
 
 stop_button_x = 530
 stop_button_y = 580
@@ -314,11 +314,14 @@ while not done:
                     manual_mode = False
                     # resume_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((stop_button_x, stop_button_y), (stop_button_width, stop_button_height)), text='STOP', manager=manager, object_id="#stop_button")
                     stop_button.set_text("STOP")
+                    med_status.set_text("SELECT MED TO BEGIN INFUSION")
+                    manual_info.set_text("MANUAL MODE IS NOT ENABLED")
                     # resume_auto_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((manual_override_x, manual_override_y), (manual_override_width, manual_override_height)), text='OVERRIDE', manager=manager, object_id="#override_button")
                     manual_override_button.set_text("MANUAL OVERRIDE")
-                    system_popup = UITextBox("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.",
-                                        pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
-                                        manager=manager, object_id="#system_resume_popup")
+                    # system_popup = UITextBox("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.",
+                    #                     pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
+                    #                     manager=manager, object_id="#system_resume_popup")
+                    system_popup.set_text("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.")
                     menu = UIDropDownMenu(options_list={"n/a", "Sodium nitroprusside"},
                       starting_option="n/a",
                       relative_rect=pygame.Rect((select_med_x, select_med_y), (select_med_width, select_med_height)),
@@ -327,9 +330,12 @@ while not done:
                     system_stop = True
                     # resume_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((stop_button_x, stop_button_y), (stop_button_width, stop_button_height)), text='RESET', manager=manager, object_id="#reset_button")
                     stop_button.set_text("RESET")
+                    med_status.set_text("INFUSION STOPPED")
+                    manual_info.set_text("INFUSION STOPPED")
                     # med_display = UITextBox("n/a",
                     #                         pygame.Rect((med_display_x, med_display_y), (med_display_width, med_display_height)),
                     #                         manager=manager, object_id="#med_display")
+                    system_popup.set_text("SYSTEM STOPPED. INFUSION RATE IS 0. PRESS RESET TO RESUME CONTROL.")
                     menu = UIDropDownMenu(options_list={"n/a", "Sodium nitroprusside"},
                       starting_option="n/a",
                       relative_rect=pygame.Rect((select_med_x, select_med_y), (select_med_width, select_med_height)),
@@ -358,18 +364,23 @@ while not done:
                 print("override button pressed")
                 if not manual_mode:
                     manual_mode = True
-                    system_popup = UITextBox("MANUAL MODE ENABLED. INPUT THE INFUSION RATE AND PRESS ENTER. PRESS RESUME AUTO TO RESUME AUTOMATIC CONTROL.",
-                                            pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
-                                            manager=manager, object_id="#system_manual_popup")
+                    manual_info.set_text("INPUT INFUSION RATE")
+                    med_status.set_text("Mode: MANUAL INFUSION")
+                    # system_popup = UITextBox("MANUAL MODE ENABLED. INPUT THE INFUSION RATE AND PRESS ENTER. PRESS RESUME AUTO TO RESUME AUTOMATIC CONTROL.",
+                    #                         pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
+                    #                         manager=manager, object_id="#system_manual_popup")
+                    system_popup.set_text("MANUAL MODE ENABLED. INPUT THE INFUSION RATE AND PRESS ENTER. PRESS RESUME AUTO TO RESUME AUTOMATIC CONTROL.")
                     # resume_auto_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((manual_override_x, manual_override_y), (manual_override_width, manual_override_height)), text='RESUME AUTO', manager=manager, object_id="#resume_auto_button")
                     manual_override_button.set_text("RESUME AUTO")
                     # manual_override_button.set_text("RESUME AUTO")
                 else:
                     manual_mode = False
                     print("resume auto mode")
-                    system_popup = UITextBox("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.",
-                                             pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
-                                             manager=manager, object_id="#system_resume_popup")
+                    manual_info.set_text("MANUAL MODE IS NOT ENABLED")
+                    # system_popup = UITextBox("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.",
+                    #                          pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
+                    #                          manager=manager, object_id="#system_resume_popup")
+                    system_popup.set_text("SYSTEM IS RUNNING. AUTOMATIC CONTROL IS ENABLED.")
                     # resume_auto_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((manual_override_x, manual_override_y), (manual_override_width, manual_override_height)), text='MANUAL OVERRIDE', manager=manager, object_id="#override_button")
                     manual_override_button.set_text("MANUAL OVERRIDE")
             if event.ui_element == lock_button and not system_stop:
@@ -377,17 +388,20 @@ while not done:
                 if locked:
                     locked = False
                     # new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='LOCK', manager=manager, object_id="#unlock_button")
-                    lock_button.set_text("LOCK")
+                    lock_button.set_text("LOCK INPUT")
                 else:
                     locked = True
-                    new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='UNLOCK', manager=manager, object_id="#unlock_button")
+                    # new_lock_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((lock_button_x, lock_button_y), (lock_button_width, lock_button_height)), text='UNLOCK INPUT', manager=manager, object_id="#unlock_button")
+                    lock_button.set_text("UNLOCK INPUT")
                     
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
             if not system_stop and not locked:
                 print("Selected option:", event.text)
                 new_medication = event.text
                 medication = new_medication
-                # hide/reset dropdown options
+                if medication != "n/a":
+                    med_status.set_text("Mode: AUTO INFUSION")
+            # hide/reset dropdown options
             dropdown_cover.fill(pygame.Color("#2b2b2b"))
             window_surface.blit(dropdown_cover, (select_med_x, select_med_y + select_med_height))
 
@@ -395,7 +409,7 @@ while not done:
             print("Entered text:", event.text)
             new_manual_infusion_rate = float(event.text)
             if new_manual_infusion_rate < 0 or new_manual_infusion_rate > max_infusion:
-                print("hello")
+                print("invalid infusion rate")
             else:
                 manual_infusion_rate = new_manual_infusion_rate
                 print("new manual_infusion_rate: ", new_manual_infusion_rate)
@@ -424,7 +438,7 @@ while not done:
         #                             pygame.Rect((system_popup_x, system_popup_y), (780, 100)),
         #                             manager=manager, object_id="#system_stop_popup")
     if manual_mode:
-        print("manual control: ", manual_infusion_rate)
+        # print("manual control: ", manual_infusion_rate)
         control = manual_infusion_rate
     # print("control: ", control)
     
