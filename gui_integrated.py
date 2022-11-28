@@ -1,11 +1,10 @@
 import math
 import random
-import pygame
-from simple_pid import PID
-from pygame.locals import *
 
-# pygame gui imports
+# pygame imports
 # -----------------------------------------------------
+import pygame
+from pygame.locals import *
 import pygame_gui
 from pygame_gui.elements.ui_text_box import UITextBox
 from pygame_gui.elements.ui_label import UILabel
@@ -13,15 +12,15 @@ from pygame_gui.elements.ui_drop_down_menu import UIDropDownMenu
 from pygame_gui.windows.ui_message_window import UIMessageWindow
 from pygame_gui.elements.ui_text_entry_line import UITextEntryLine
 
-# set up pid stuff
+# pygame set up
 # -----------------------------------------------------
 pygame.init()
 clock = pygame.time.Clock()
 
 # pid tuning parameters
 # -----------------------------------------------------
-P = 0.75
-I = 0.05
+P = 0.5
+I = 0.015
 D = 0
 
 # map model vars
@@ -42,7 +41,6 @@ for i in range(0, 100):
 
 # constants
 # -----------------------------------------------------
-bp_wave_y = 200
 done = False
 c = 1 #scale factor
 vertical_shift = 0
@@ -51,11 +49,11 @@ vertical_shift = 0
 # -----------------------------------------------------
 bp_log = [] # initial bp
 initial_map = 80
-map = 80
-target_bp = 65
-new_target_bp = target_bp # temporary var for target bp
-low_bound = target_bp - 5 # lower bound of target bp range
-high_bound = target_bp + 5 # upper bound of target bp range
+current_map = 80
+target_map = 65
+new_target_bp = target_map # temporary var for target bp
+low_bound = target_map - 5 # lower bound of target bp range
+high_bound = target_map + 5 # upper bound of target bp range
 medication = "n/a"
 new_medication = medication # temporary var for medication selected
 in_range = False
@@ -71,14 +69,14 @@ fps = 10
 #create the bp log
 # -----------------------------------------------------
 for t in range(0, 380):
-    bp_log.append(map)
+    bp_log.append(current_map)
     
 initial_avg = sum(bp_log)/len(bp_log)
 
 # patient response to infusion rate
 # -----------------------------------------------------
 def response(infusion):
-    global map
+    global current_map
     global infusion_log
     global map_change
     global previous_map_change
@@ -90,16 +88,17 @@ def response(infusion):
     # print("new infusion: ", infusion)
     infusion_log.append(infusion)
     infusion_log.pop(0)
-    map_change = (b0 * infusion_log[len(infusion_log) - 1 - d * fps]+ bm * infusion_log[len(infusion_log) - 1 - d * fps - m * fps] + a1 * previous_map_change)/20 + random.randrange(-2, 2)
+    map_change = (b0 * infusion_log[len(infusion_log) - 1 - d * fps]+ bm * infusion_log[len(infusion_log) - 1 - d * fps - m * fps] + a1 * previous_map_change) / fps + random.randrange(-2, 2)
     previous_map_change = map_change
-    map = map - map_change
-    bp_log.append(map)
+    current_map = current_map - map_change
+    bp_log.append(current_map)
     bp_log.pop(0)
 
 # pygame window setup
 # -----------------------------------------------------
 pygame.display.set_caption("Ultimate Feedback")
 window_surface = pygame.display.set_mode((800, 750)) # overall window
+bp_wave_y = 200
 bp_wave = pygame.Surface((760, 200)) # display block for bp wave
 dropdown_cover = pygame.Surface((200, 75)) # display block to hide/reset dropdown after selecting option
 
@@ -117,24 +116,6 @@ pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(430, 230, 
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 400, 410, 160), 0, 10) # med info box
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(430, 400, 360, 160), 0, 10) # manual override box
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 570, 780, 60), 0, 10) # buttons box
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(270, 460, 230, 170), 0, 10)
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(510, 460, 280, 170), 0, 10)
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 380, 490, 70), 0, 10)
-
-# target MAP label
-# -----------------------------------------------------
-# target_display_x = 600
-# target_display_y = 90
-# target_display_width = 150
-# target_display_height = 60
-# target_text = UILabel(pygame.Rect((target_display_x - 75, target_display_y), (75, 45)), "Target",
-#                       manager=manager)
-
-# target MAP display
-# -----------------------------------------------------
-# target_display = UITextBox(str(target_bp),
-#                            pygame.Rect((target_display_x, target_display_y), (target_display_width, target_display_height)),
-#                            manager=manager)
 
 # current MAP label
 # -----------------------------------------------------
@@ -165,6 +146,7 @@ status_text = UILabel(pygame.Rect((status_x, status_y - 40), (status_width, 45))
 pygame.draw.rect(window_surface, pygame.Color('white'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
 pygame.draw.rect(window_surface, pygame.Color('black'), pygame.Rect(status_x, status_y, status_width, status_height), 1, 10)
 
+
 # med info status indicator
 # -----------------------------------------------------
 med_status_x = 20
@@ -188,21 +170,6 @@ infusion_display = UITextBox(str(infusion_log[len(infusion_log) - 1]),
                              pygame.Rect((infusion_display_x, infusion_display_y), (infusion_display_width, infusion_display_height)),
                              manager=manager)
 
-# current medication label
-# -----------------------------------------------------
-# med_display_x = 600
-# med_display_y = 325
-# med_display_width = 150
-# med_display_height = 60
-# med_text = UILabel(pygame.Rect((med_display_x - 75, med_display_y), (80, 45)), "Med",
-#                    manager=manager)
-
-# current medication display
-# -----------------------------------------------------
-# med_display = UITextBox(medication,
-#                         pygame.Rect((med_display_x, med_display_y), (med_display_width, med_display_height)),
-#                         manager=manager, object_id="#med_display")
-
 # target bp selection
 # -----------------------------------------------------
 target_select_x = 440
@@ -211,11 +178,9 @@ target_select_width = 200
 target_select_height = 100
 target_map_text = UILabel(pygame.Rect((target_select_x, target_select_y - 40), (200, 45)), "Target MAP (mmHg)",
                    manager=manager)
-target_bp_display = UITextBox(str(target_bp),
+target_bp_display = UITextBox(str(target_map),
                               pygame.Rect((target_select_x, target_select_y), (target_select_width, target_select_height)),
                               manager=manager)
-
-# enter_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((285, 480), (200, 120)), text='UPDATE', manager=manager, object_id="#update_button")
 
 lock_button_x = 20
 lock_button_y = 580
@@ -286,19 +251,18 @@ while not done:
     time_delta = 1 / timestep
     clock.tick(fps)
     # manager.update(time_delta)
-    # clock.tick(FPS); #set framerate
     
-    # frame_counter = frame_counter + 1
-    # if not in_range:
-    #     if frame_counter == 5:
-    #         pygame.draw.rect(window_surface, pygame.Color('white'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
-    #     if frame_counter == 10:
-    #         pygame.draw.rect(window_surface, pygame.Color('red'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
-    #         frame_counter = 0
-    # else:
-    #     frame_counter = 0
-    #     pygame.draw.rect(window_surface, pygame.Color('green'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
-    # pygame.draw.rect(window_surface, pygame.Color('black'), pygame.Rect(status_x, status_y, status_width, status_height), 1, 10)
+    frame_counter = frame_counter + 1
+    if not in_range:
+        if frame_counter == 5:
+            pygame.draw.rect(window_surface, pygame.Color('white'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
+        if frame_counter == 10:
+            pygame.draw.rect(window_surface, pygame.Color('red'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
+            frame_counter = 0
+    else:
+        frame_counter = 0
+        pygame.draw.rect(window_surface, pygame.Color('green'), pygame.Rect(status_x, status_y, status_width, status_height), 0, 10)
+    pygame.draw.rect(window_surface, pygame.Color('black'), pygame.Rect(status_x, status_y, status_width, status_height), 1, 10)
 
     
     events = pygame.event.get()
@@ -333,16 +297,16 @@ while not done:
                       manager=manager)
             if event.ui_element == up_button and not system_stop and not locked:
                 new_target_bp = new_target_bp + 1
-                target_bp = new_target_bp
-                low_bound = target_bp - 5
-                high_bound = target_bp + 5
+                target_map = new_target_bp
+                low_bound = target_map - 5
+                high_bound = target_map + 5
                 target_bp_display.set_text(str(new_target_bp))
                 print("Up button pressed")
             if event.ui_element == down_button and not system_stop and not locked:
                 new_target_bp = new_target_bp - 1
-                target_bp = new_target_bp
-                low_bound = target_bp - 5
-                high_bound = target_bp + 5
+                target_map = new_target_bp
+                low_bound = target_map - 5
+                high_bound = target_map + 5
                 target_bp_display.set_text(str(new_target_bp))
                 print("Down button pressed")
             if event.ui_element == manual_override_button and not system_stop:
@@ -394,11 +358,11 @@ while not done:
     manager.update(1/fps) # needed for button press to be registered
     
     # PID controller
-    error = map - target_bp
+    error = current_map - target_map
     integral += error * timestep
     derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
     control = P * error + I * integral + D * derivative
-    if control < 0:
+    if control < 0 or current_map < low_bound:
         control = 0
     if control > max_infusion:
         control = max_infusion
@@ -430,7 +394,7 @@ while not done:
     #mean
     pygame.draw.line(bp_wave, (0, 0, 255), (0,(bp_wave_y-c*avg+vertical_shift)), ((760, (bp_wave_y-c*avg+vertical_shift))), width=3)
     #target
-    pygame.draw.line(bp_wave, (150, 210, 148), (0,(bp_wave_y-c*target_bp+vertical_shift)), ((760, (bp_wave_y-c*target_bp+vertical_shift))), width=2)
+    pygame.draw.line(bp_wave, (150, 210, 148), (0,(bp_wave_y-c*target_map+vertical_shift)), ((760, (bp_wave_y-c*target_map+vertical_shift))), width=2)
 
     #iterates and draws line between bp points
     for i in range(len(bp_log) - 1):
