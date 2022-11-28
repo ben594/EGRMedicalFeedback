@@ -116,24 +116,6 @@ pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(430, 230, 
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 400, 410, 160), 0, 10) # med info box
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(430, 400, 360, 160), 0, 10) # manual override box
 pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 570, 780, 60), 0, 10) # buttons box
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(270, 460, 230, 170), 0, 10)
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(510, 460, 280, 170), 0, 10)
-# pygame.draw.rect(window_surface, pygame.Color('#2b2b2b'), pygame.Rect(10, 380, 490, 70), 0, 10)
-
-# target MAP label
-# -----------------------------------------------------
-# target_display_x = 600
-# target_display_y = 90
-# target_display_width = 150
-# target_display_height = 60
-# target_text = UILabel(pygame.Rect((target_display_x - 75, target_display_y), (75, 45)), "Target",
-#                       manager=manager)
-
-# target MAP display
-# -----------------------------------------------------
-# target_display = UITextBox(str(target_bp),
-#                            pygame.Rect((target_display_x, target_display_y), (target_display_width, target_display_height)),
-#                            manager=manager)
 
 # current MAP label
 # -----------------------------------------------------
@@ -188,21 +170,6 @@ infusion_display = UITextBox(str(infusion_log[len(infusion_log) - 1]),
                              pygame.Rect((infusion_display_x, infusion_display_y), (infusion_display_width, infusion_display_height)),
                              manager=manager)
 
-# current medication label
-# -----------------------------------------------------
-# med_display_x = 600
-# med_display_y = 325
-# med_display_width = 150
-# med_display_height = 60
-# med_text = UILabel(pygame.Rect((med_display_x - 75, med_display_y), (80, 45)), "Med",
-#                    manager=manager)
-
-# current medication display
-# -----------------------------------------------------
-# med_display = UITextBox(medication,
-#                         pygame.Rect((med_display_x, med_display_y), (med_display_width, med_display_height)),
-#                         manager=manager, object_id="#med_display")
-
 # target bp selection
 # -----------------------------------------------------
 target_select_x = 440
@@ -214,8 +181,6 @@ target_map_text = UILabel(pygame.Rect((target_select_x, target_select_y - 40), (
 target_bp_display = UITextBox(str(target_map),
                               pygame.Rect((target_select_x, target_select_y), (target_select_width, target_select_height)),
                               manager=manager)
-
-# enter_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((285, 480), (200, 120)), text='UPDATE', manager=manager, object_id="#update_button")
 
 lock_button_x = 20
 lock_button_y = 580
@@ -286,7 +251,6 @@ while not done:
     time_delta = 1 / timestep
     clock.tick(fps)
     # manager.update(time_delta)
-    # clock.tick(FPS); #set framerate
     
     frame_counter = frame_counter + 1
     if not in_range:
