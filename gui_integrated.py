@@ -16,11 +16,12 @@ from pygame_gui.elements.ui_text_entry_line import UITextEntryLine
 # -----------------------------------------------------
 pygame.init()
 clock = pygame.time.Clock()
+font1 = pygame.font.SysFont('chalkduster.ttf', 20)
 
 # pid tuning parameters
 # -----------------------------------------------------
-P = 0.5
-I = 0.015
+P = 0.75
+I = 0.014
 D = 0
 
 # map model vars
@@ -88,9 +89,9 @@ def response(infusion):
     # print("new infusion: ", infusion)
     infusion_log.append(infusion)
     infusion_log.pop(0)
-    map_change = (b0 * infusion_log[len(infusion_log) - 1 - d * fps]+ bm * infusion_log[len(infusion_log) - 1 - d * fps - m * fps] + a1 * previous_map_change) / fps + random.randrange(-2, 2)
+    map_change = (b0 * infusion_log[len(infusion_log) - 1 - d]+ bm * infusion_log[len(infusion_log) - 1 - d - m] + a1 * previous_map_change)
     previous_map_change = map_change
-    current_map = current_map - map_change
+    current_map = initial_map - map_change #+ random.randrange(-2, 2)
     bp_log.append(current_map)
     bp_log.pop(0)
 
@@ -239,16 +240,17 @@ menu = UIDropDownMenu(options_list={"n/a", "Sodium nitroprusside"},
                       relative_rect=pygame.Rect((select_med_x, select_med_y), (select_med_width, select_med_height)),
                       manager=manager)
 
-timestep = 1/fps
+timestep = 1
 integral = 0
 derivative = 0
 
 system_stop = False
 
+counter = 0
 
 # main loop
 while not done:
-    time_delta = 1 / timestep
+    time_delta = timestep
     clock.tick(fps)
     # manager.update(time_delta)
     
@@ -357,24 +359,27 @@ while not done:
         
     manager.update(1/fps) # needed for button press to be registered
     
+    counter += 1
     # PID controller
-    error = current_map - target_map
-    integral += error * timestep
-    derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
-    control = P * error + I * integral + D * derivative
-    if control < 0 or current_map < low_bound:
-        control = 0
-    if control > max_infusion:
-        control = max_infusion
-    if system_stop:
-        control = 0
-        medication = "n/a"        
-    if manual_mode:
-        control = manual_infusion_rate
     
-    if medication == "n/a":
-        control = 0
-    response(control)
+    if (counter % fps == 0):
+        error = current_map - target_map
+        integral += error * timestep
+        derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
+        control = P * error + I * integral + D * derivative
+        if control < 0 or current_map < low_bound:
+            control = 0
+        if control > max_infusion:
+            control = max_infusion
+        if system_stop:
+            control = 0
+            medication = "n/a"        
+        if manual_mode:
+            control = manual_infusion_rate
+        
+        if medication == "n/a":
+            control = 0
+        response(control)
 
     manager.draw_ui(window_surface)
     bp_wave.fill(pygame.Color("#2b2b2b"))
@@ -385,7 +390,13 @@ while not done:
         in_range = True
     else:
         in_range = False
-        
+
+    #draw axes
+    pygame.draw.line(bp_wave, (255, 255, 255), (0, 0), (0, 200), width=2)
+    for i in range (200):
+        if (i % 20 == 0):
+            pygame.draw.line(bp_wave, (255, 255, 255), (0, 200-i), (10, 200-i), width=1)            
+
     # draw lines
     #lower boundary
     pygame.draw.line(bp_wave, (203, 76, 78), (0,(bp_wave_y-c*low_bound+vertical_shift)), ((760, (bp_wave_y-c*low_bound+vertical_shift))), width=2)
