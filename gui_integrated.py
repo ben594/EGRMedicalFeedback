@@ -91,7 +91,7 @@ def response(infusion):
     infusion_log.pop(0)
     map_change = (b0 * infusion_log[len(infusion_log) - 1 - d]+ bm * infusion_log[len(infusion_log) - 1 - d - m] + a1 * previous_map_change)
     previous_map_change = map_change
-    current_map = initial_map - map_change #+ random.randrange(-2, 2)
+    current_map = initial_map - map_change + random.randrange(-2, 2)
     bp_log.append(current_map)
     bp_log.pop(0)
 
