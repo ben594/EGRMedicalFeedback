@@ -69,8 +69,8 @@ fps = 10
 
 #create the bp log
 # -----------------------------------------------------
-for t in range(0, 380):
-    bp_log.append(current_map)
+for t in range(0, 378):
+    bp_log.append(current_map + random.randrange(-2, 2))
     
 initial_avg = sum(bp_log)/len(bp_log)
 
@@ -276,6 +276,7 @@ while not done:
             if event.ui_element == stop_button:
                 print("Stop button pressed")
                 if system_stop:
+                    integral = 0 # reset the integral term of the PID controller
                     system_stop = False
                     manual_mode = False
                     stop_button.set_text("STOP")
@@ -298,6 +299,7 @@ while not done:
                       relative_rect=pygame.Rect((select_med_x, select_med_y), (select_med_width, select_med_height)),
                       manager=manager)
             if event.ui_element == up_button and not system_stop and not locked:
+                integral = 0 # reset the integral term of the PID controller
                 new_target_bp = new_target_bp + 1
                 target_map = new_target_bp
                 low_bound = target_map - 5
@@ -305,6 +307,7 @@ while not done:
                 target_bp_display.set_text(str(new_target_bp))
                 print("Up button pressed")
             if event.ui_element == down_button and not system_stop and not locked:
+                integral = 0 # reset the integral term of the PID controller
                 new_target_bp = new_target_bp - 1
                 target_map = new_target_bp
                 low_bound = target_map - 5
@@ -320,6 +323,7 @@ while not done:
                     system_popup.set_text("MANUAL MODE ENABLED. INPUT THE INFUSION RATE AND PRESS ENTER. PRESS RESUME AUTO TO RESUME AUTOMATIC CONTROL.")
                     manual_override_button.set_text("RESUME AUTO")
                 else:
+                    integral = 0 # reset the integral term of the PID controller
                     manual_mode = False
                     print("resume auto mode")
                     manual_info.set_text("MANUAL MODE IS NOT ENABLED")
@@ -340,6 +344,7 @@ while not done:
                 new_medication = event.text
                 medication = new_medication
                 if medication != "n/a":
+                    integral = 0 # reset the integral term of the PID controller
                     med_status.set_text("Mode: AUTO INFUSION")
             # hide/reset dropdown options
             dropdown_cover.fill(pygame.Color("#2b2b2b"))
@@ -362,9 +367,10 @@ while not done:
     counter += 1
     # PID controller
     
-    if (counter % fps == 0):
+    if counter % fps == 0:
         error = current_map - target_map
-        integral += error * timestep
+        if medication != "n/a":
+            integral += error * timestep
         derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
         control = P * error + I * integral + D * derivative
         if control < 0 or current_map < low_bound:
@@ -385,7 +391,10 @@ while not done:
     bp_wave.fill(pygame.Color("#2b2b2b"))
 
     #avg bp in given frame
-    avg = sum(bp_log)/len(bp_log)
+    sum = 0
+    for i in range(1, 11):
+        sum += bp_log[len(bp_log) - i]
+    avg = sum / 10
     if avg >= low_bound and avg <= high_bound:
         in_range = True
     else:
