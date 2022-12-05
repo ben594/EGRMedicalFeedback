@@ -75,55 +75,60 @@ counter = 0
 
 target_map_list = [60, 62, 65, 68, 70]
 starting_map_list = [115, 120, 125, 130, 140]
+repetitions = 3
+
+total_tests = len(target_map_list) * len(starting_map_list) * repetitions
 
 # main loop
 for target in target_map_list:
     for start in starting_map_list:
-        print("target map: ", target, " starting map: ", start)
-        # reset things
-        derivative = 0
-        integral = 0
-        target_map = target
-        current_map = start
-        low_bound = target_map - 5
-        high_bound = target_map + 5
-        map_change = 0
-        previous_map_change = 0
-        initial_map = start
-        
-        infusion_log = []
-        for i in range(0, 100):
-            infusion_log.append(0)
+        for repetition in range(0, repetitions):
+            print("target map: ", target, " starting map: ", start)
+            # reset things
+            derivative = 0
+            integral = 0
+            target_map = target
+            current_map = start
+            low_bound = target_map - 5
+            high_bound = target_map + 5
+            map_change = 0
+            previous_map_change = 0
+            initial_map = start
             
-        bp_log = [] # initial bp
-        for t in range(0, 380):
-            bp_log.append(current_map)
-        
-        # run algorithm/simulation for 300 seconds
-        for t in range(0, 300):
-            error = current_map - target_map
-            integral += error * timestep
-            derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
-            control = P * error + I * integral + D * derivative
-            if control < 0 or current_map < low_bound:
-                control = 0
-            if control > max_infusion:
-                control = max_infusion
-            
-            response(control)
-
-            #avg bp in given frame
-            avg = sum(bp_log)/len(bp_log)
-            if avg >= low_bound and avg <= high_bound:
-                in_range = True
-            else:
-                in_range = False
+            infusion_log = []
+            for i in range(0, 100):
+                infusion_log.append(0)
                 
-        if current_map >= low_bound and current_map <= high_bound:
-            print("final map: ", current_map)
-            print("test passed")
-            counter = counter + 1
-        else:
-            print("test failed")
+            bp_log = [] # initial bp
+            for t in range(0, 380):
+                bp_log.append(current_map)
             
-print("total tests passed: ", counter)
+            # run algorithm/simulation for 300 seconds
+            for t in range(0, 300):
+                error = current_map - target_map
+                integral += error * timestep
+                derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
+                control = P * error + I * integral + D * derivative
+                if control < 0 or current_map < low_bound:
+                    control = 0
+                if control > max_infusion:
+                    control = max_infusion
+                
+                response(control)
+
+                #avg bp in given frame
+                avg = sum(bp_log)/len(bp_log)
+                if avg >= low_bound and avg <= high_bound:
+                    in_range = True
+                else:
+                    in_range = False
+                    
+            if current_map >= low_bound and current_map <= high_bound:
+                print("final map: ", current_map)
+                print("test passed")
+                counter = counter + 1
+            else:
+                print("test failed")
+            
+print("total tests passed: ", counter, " out of " , total_tests)
+print("pass rate: ", counter/total_tests)
