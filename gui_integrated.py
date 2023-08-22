@@ -19,9 +19,9 @@ clock = pygame.time.Clock()
 
 # pid tuning parameters
 # -----------------------------------------------------
-P = 0.75 # coefficient of proportional term in pid equation
+P = 0.5 # coefficient of proportional term in pid equation
 I = 0.014 # coefficient of integral term
-D = 0 # coefficient of derivative term
+D = 0.01 # coefficient of derivative term
 
 # map model constants (see: https://www.proquest.com/docview/230725657?fromopenview=true&parentSessionId=W1kMUlbGIOWNRCDnOmr7ZIiBreMlbr1k0L7jFS3UGzY%3D&pq-origsite=gscholar)
 # -----------------------------------------------------
@@ -415,7 +415,7 @@ while not done:
         # only run pid if auto infusion is activated
         if medication != "n/a":
             integral += error * timestep
-        derivative = (bp_log[len(bp_log) - 1] - bp_log[len(bp_log) - 2]) / timestep
+        derivative = ((bp_log[len(bp_log) - 1] - target_map) - (bp_log[len(bp_log) - 2] - target_map)) / timestep
         control = P * error + I * integral + D * derivative # control is new infusion rate
         
         # check infusion rate within valid range, check whether system stopped or in manual mode

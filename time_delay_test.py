@@ -8,9 +8,9 @@ from pygame.locals import *
 
 # pid tuning parameters
 # -----------------------------------------------------
-P = 0.5
+P = 0.75
 I = 0.014
-D = 0.01
+D = 0
 
 # map model vars
 # -----------------------------------------------------
@@ -83,7 +83,7 @@ total_tests = len(target_map_list) * len(starting_map_list) * repetitions
 for target in target_map_list:
     for start in starting_map_list:
         for repetition in range(0, repetitions):
-            print("\ntarget map: ", target, " starting map: ", start)
+            print("target map: ", target, " starting map: ", start)
             # reset things
             derivative = 0
             integral = 0
@@ -124,11 +124,10 @@ for target in target_map_list:
                     in_range = False
                     
             if current_map >= low_bound and current_map <= high_bound:
-                print("final map: ", current_map)
                 print("test passed")
                 counter = counter + 1
             else:
                 print("test failed")
+            print("final map: ", current_map)
             
 print("total tests passed: ", counter, " out of " , total_tests)
-print("pass rate: ", counter/total_tests)

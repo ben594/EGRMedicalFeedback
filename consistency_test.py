@@ -8,9 +8,9 @@ from pygame.locals import *
 
 # pid tuning parameters
 # -----------------------------------------------------
-P = 0.75
+P = 0.5
 I = 0.014
-D = 0
+D = 0.01
 
 # map model vars
 # -----------------------------------------------------
@@ -61,7 +61,7 @@ def response(infusion):
     infusion_log.pop(0)
     map_change = (b0 * infusion_log[len(infusion_log) - 1 - d]+ bm * infusion_log[len(infusion_log) - 1 - d - m] + a1 * previous_map_change)
     previous_map_change = map_change
-    current_map = initial_map - map_change + random.randrange(-1, 1)
+    current_map = initial_map - map_change + random.randrange(-2, 2)
     bp_log.append(current_map)
     bp_log.pop(0)
 

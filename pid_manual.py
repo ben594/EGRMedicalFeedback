@@ -29,7 +29,7 @@ for i in range(0, 10):
 # define variables for blood pressure
 bp_log = []
 map = 100
-target_map = 140
+target_map = 70
 previous_map_change = 0
 map_change = 0
 
